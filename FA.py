@@ -19,6 +19,13 @@ class FA:
         self.accept_states = accept_states
         self.transitions = transitions
 
+    def get_next_states(self, current_state, input_char):
+        next_states = []
+        for transition in self.transitions:
+            if transition[0] == current_state and transition[2] == input_char:
+                next_states.append(transition[1])
+        return next_states
+
     def accept(self, input_string):
         """
         Determines whether the finite automaton accepts the given input.
@@ -29,14 +36,10 @@ class FA:
         Returns:
         bool: True if the input is accepted by the finite automaton, False otherwise.
         """
-        current_state = self.start_state  # Set the current state to the start state
-        for char in input_string:  # For each character in the input string
-            transition_found = False
-            for transition in self.transitions:
-                if transition[0] == current_state and transition[2] == char:
-                    current_state = transition[1]  # Update the current state based on the transition
-                    transition_found = True
-                    break
-            if not transition_found:
-                return False  # If no valid transition is found, reject the input
-        return current_state in self.accept_states  # Check if the final state is an accept state and return the result
+        current_states = {self.start_state}
+        for char in input_string:
+            next_states = set()
+            for state in current_states:
+                next_states.update(self.get_next_states(state, char))
+            current_states = next_states
+        return bool(current_states.intersection(self.accept_states))

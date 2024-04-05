@@ -34,8 +34,19 @@ def read_file(file_name):
 
         return FA(alphabet, states, start_state, accept_states, transitions)
 
+strings = ['aaa', 'aab', 'aba', 'abb', 'bbb', 'bba', 'bab', 'baa']
 
-file = 'definitions/dfadesc.txt'
-input_string = '101'
-fa = read_file(file)
-print(fa.accept(input_string))
+file = input('Enter the name of the file: ')
+file = 'definitions/' + file + '.txt'
+
+file2 = 'inputs.txt'
+with open(file2, 'r') as f:
+    strings = f.readlines()
+strings = [s.strip() for s in strings]
+
+for string in strings:
+    fa = read_file(file)
+    if fa.accept(string):
+        print('Accepted the string: ', string)
+    else:
+        print('Rejected the string: ', string)
