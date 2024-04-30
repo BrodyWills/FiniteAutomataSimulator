@@ -1,3 +1,5 @@
+from collections import deque
+
 class FA:
     def __init__(self, alphabet, states, start_state, accept_states, transitions):
         """
@@ -37,23 +39,26 @@ class FA:
         return next_states
 
     def get_epsilon_states(self, current_states):
-        epsilon_states = list(current_states)
-        new_states = [1]
-        found = False
+        epsilon_states = set(current_states)
+        queue = deque(current_states)
 
-        while new_states:
-            for state in epsilon_states:
-                new_states = []
-                new_states = self.get_next_states(state, 'EPSILON')
-                if new_states:
-                    epsilon_states.extend(new_states)
-                    # check if state has any non-epsilon transitions
-                    for transition in self.transitions:
-                        if (transition[0] == state and transition[2] != "EPSILON"):
-                            found = True
-                    if not found:
-                        epsilon_states.remove(state)
+        while queue:
+            state = queue.popleft()
+            epsilon_transitions = self.get_next_states(state, 'EPSILON')
+            for new_state in epsilon_transitions:
+                if new_state not in epsilon_states:
+                    epsilon_states.add(new_state)
+                    queue.append(new_state)
+
+        # Remove states without non-epsilon transitions
+        for state in epsilon_states.copy():
+            has_non_epsilon_transition = any(
+                transition[0] == state and transition[2] != 'EPSILON' for transition in self.transitions)
+            if not has_non_epsilon_transition:
+                epsilon_states.remove(state)
+
         return epsilon_states
+
     def accept(self, input_string):
         """
         Determines whether the finite automaton accepts the given input.
@@ -76,6 +81,6 @@ class FA:
             if not next_states:
                 return False
 
-            current_states.update(self.get_epsilon_states(current_states))
+            current_states = self.get_epsilon_states(current_states)
 
         return bool(current_states.intersection(self.accept_states))
