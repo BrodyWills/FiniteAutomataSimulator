@@ -30,23 +30,28 @@ def read_file(file_name):
         transitions = []
         for i in range(num_transitions):
             transition = f.readline().strip().split(',')  # Read each transition and split it into components
-            transitions.append((transition[0], transition[1], transition[2]))  # Add the transition to the list of transitions
+            transitions.append(
+                (transition[0], transition[1], transition[2]))  # Add the transition to the list of transitions
 
         return FA(alphabet, states, start_state, accept_states, transitions)
 
-strings = ['aaa', 'aab', 'aba', 'abb', 'bbb', 'bba', 'bab', 'baa']
 
 file = input('Enter the name of the file: ')
-file = 'definitions/' + file + '.txt'
+file = 'definitions/' + file
 
 file2 = 'inputs.txt'
 with open(file2, 'r') as f:
     strings = f.readlines()
 strings = [s.strip() for s in strings]
 
+count = 0
+
 for string in strings:
     fa = read_file(file)
     if fa.accept(string):
-        print('Accepted the string: ', string)
+        print('Accepted the string:', string)
+        count += 1
     else:
-        print('Rejected the string: ', string)
+        print('Rejected the string:', string)
+
+print('Accepted', count, '/', len(strings))
