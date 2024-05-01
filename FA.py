@@ -34,7 +34,7 @@ class FA:
         """
         next_states = []
         for transition in self.transitions:
-            if (transition[0] == current_state and transition[2] == input_char) or transition[0] == current_state and transition[2] == 'EPSILON':
+            if transition[0] == current_state and (transition[2] == input_char):
                 next_states.append(transition[1])
         return next_states
 
