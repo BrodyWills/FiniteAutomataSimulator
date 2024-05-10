@@ -1,6 +1,6 @@
-# Finite Automaton (FA) Implementation
+# Finite Automaton (FA) Simulator
 
-This Python program implements a Finite Automaton (FA) class that models both deterministic finite automata (DFA) and nondeterministic finite automata (NFA). The FA is capable of processing input strings and determining whether they are accepted by the automaton.
+This Python program implements a Finite Automaton (FA) simulator class that models both deterministic finite automata (DFA) and nondeterministic finite automata (NFA). The FA is capable of processing input strings and determining whether they are accepted by the automaton.
 
 ## DFA/NFA Defintion File Format
 The first line contains the alphabet symbols (no spaces or commas)
